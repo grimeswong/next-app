@@ -30,10 +30,17 @@ export async function PUT(
   return NextResponse.json({ id: 1, name: body.name });
 }
 
-// Steps:
-// Validate the request body
-// If invalide, return 400
-// Fetch the user with the given id
-// If doesn't exist, return 404
-// Update the user
-// Return the udpated user
+// DELETE - deleting data
+export function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
+  if (params.id > 10) return NextResponse.json({ error: "User not found"}, { status: 404 })
+  
+  return NextResponse.json({});
+}
+
+// Fetch user from database 
+// If not found, return 404
+// Delete the user
+// Return 200
