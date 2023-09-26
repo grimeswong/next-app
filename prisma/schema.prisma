@@ -9,3 +9,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int     @id @default(autoincrement()) // use unique id number, and auto increament
+  email     String  @unique // use unique string(email)
+  name      String
+  followers Int     @default(0)
+  isActive  Boolean @default(true)
+}
