@@ -12,12 +12,28 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validation = schema.safeParse(body);
-  // Validate
-  // If invalid, return 400,
-  // Else, return
+
+  // if validation is failed
   if (!validation.success)
     return NextResponse.json(validation.error.errors, { status: 400 });
-  return NextResponse.json({ id: 1, name: body.name }, { status: 201 });
+
+  // to check the user is existing in database?
+  const user = await prisma.user.findUnique({
+    where: { email: body.email },
+  });
+
+  // if user is existing in db, return error message (bad request)
+  if (user)
+    return NextResponse.json({ error: "User already exists" }, { status: 400 });
+
+  // if validation is success
+  const newUser = await prisma.user.create({
+    // Do not just set body that users can inject malicious codes
+    data: {
+      name: body.name,
+      email: body.email,
+    },
+  });
+  return NextResponse.json(newUser, { status: 201 });
 }
 
-// PUT - updating data
