@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import schema from '../schema';
+import schema from "../schema";
+import prisma from "@/prisma/client";
 
 // interface Props {
 //     params: number;
 // }
 
-export function GET(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
-  // inline declaration
-  // Fetch data from a db
-  // If not found, return 404 error,
-  // Else return data
-  if (params.id > 10)
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+  if (!user)  // if return object is falsely
     return NextResponse.json({ error: "User not found" }, { status: 404 });
-  return NextResponse.json({ id: 1, name: "Mosh" });
+  return NextResponse.json(user);
 }
 
 // PUT - updating data
@@ -37,12 +37,13 @@ export function DELETE(
   request: NextRequest,
   { params }: { params: { id: number } }
 ) {
-  if (params.id > 10) return NextResponse.json({ error: "User not found"}, { status: 404 })
-  
+  if (params.id > 10)
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+
   return NextResponse.json({});
 }
 
-// Fetch user from database 
+// Fetch user from database
 // If not found, return 404
 // Delete the user
 // Return 200
