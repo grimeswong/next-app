@@ -48,6 +48,9 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  // pages: {
+  //   newUser: '/register'
+  // }
 };
 
 const handler = NextAuth(authOptions);
