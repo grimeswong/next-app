@@ -4,6 +4,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 export async function POST(postData: FieldValues) {
   const res = await fetch("/api/register", {
@@ -14,7 +15,7 @@ export async function POST(postData: FieldValues) {
     body: JSON.stringify(postData),
   });
   const resData = await res.json();
-  return Response.json({ resData });
+  return NextResponse.json({ resData });
 }
 
 const RegisterPage = () => {
@@ -58,6 +59,7 @@ const RegisterPage = () => {
       const result = POST(data);
       console.log(result);
       // redirect the page and login
+      redirect('/');
     }
   };
 
