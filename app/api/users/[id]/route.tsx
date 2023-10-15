@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
-import prisma from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 
 // interface Props {
 //     params: number;
@@ -11,7 +11,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: params.id },
   });
   if (!user)  // if return object is falsely
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -31,7 +31,7 @@ export async function PUT(
     return NextResponse.json(validation.error.errors, { status: 400 });
 
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) }
+    where: { id: params.id }
   })
 
   // if user is not existing, return error message and status code
@@ -57,7 +57,7 @@ export async function DELETE(
 
   // to check user whether is existing
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) }
+    where: { id: params.id }
   })
 
   // if user is not existing, return error message with status code
